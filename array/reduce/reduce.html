@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>reduce</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    html,body{
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+    .box{
+      width: 80%;
+      height: 100%;
+      margin: 0 auto;
+      background-color: #FFFFee;
+      /*border-left: 1px solid #ccc;*/
+      /*border-right: 1px solid #ccc;*/
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .head{
+      width: 100%;
+      height: 100px;
+      /*background-color: skyblue;*/
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .center{
+      width: 100%;
+      height: 80%;
+      /*background-color: pink;*/
+    }
+    .bottom{
+      width: 100%;
+      height: 200px;
+      /*background-color: greenyellow;*/
+      box-sizing: border-box;
+    }
+    h1{
+      text-align: left;
+      line-height: 100px;
+    }
+    ul{
+      padding-left: 20px;
+    }
+    ul li{
+      margin: 10px 0;
+    }
+    /*个性样式*/
+    /*红色字体*/
+    .fontRed{
+      color:red;
+    }
+    /*ps样式*/
+    .ps{
+      background-color: #eeeeee;
+      padding: 10px;
+      border-left: 10px solid #cccccc;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .ps .psWord{
+      color: #555555;
+      line-height: 40px;
+    }
+    /*代码列表样式*/
+    .list{
+      background-color: #eeeeee;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .list ol li{
+      border-left: 1px solid #000;
+      padding-left: 5px;
+    }
+    /*小标题样式*/
+    .smallTittle{
+      background-color: #FFFFee;
+      border-bottom: 1px solid #ccc;
+      margin: 10px 0;
+      padding-bottom: 40px;
+    }
+    .smallTittle h2{
+      line-height: 80px;
+    }
+    /*空格space*/
+    .space{
+      display: inline-block;
+      width: 50px;
+    }
+    .smallSpace{
+      display: inline-block;
+      width: 20px;
+    }
+  </style>
+</head>
+<body>
+<!--
+1.ps结构样式
+    <div class="ps">
+      <p class="psWord">内容</p>
+    </div>
+2.代码结构样式
+    <div class="list">
+      <ol>
+        <li>1111111</li>
+      </ol>
+    </div>
+3.小标题结构样式
+     <div class="smallTittle">
+      <h2>前言</h2>
+      <p>reduce() 方法对<span class="fontRed">数组</span>中的每个元素执行一个由您提供的reduce函数(升序执行)，将其结果汇总为单个返回值</p>
+      <p>reduce方法可做的事情特别多，就是循环遍历能做的，reduce都可以做，比如数组求和、数组求积、数组中元素出现的次数、数组去重等等</p>
+    </div>
+-->
+<div class="box">
+  <div class="head">
+    <h1>数组reduce</h1>
+  </div>
+  <div class="center">
+    <div class="smallTittle">
+      <h2>前言</h2>
+      <p>reduce() 方法对<span class="fontRed">数组</span>中的每个元素执行一个由您提供的reduce函数(升序执行)，将其结果汇总为单个返回值</p>
+      <p>reduce方法可做的事情特别多，就是循环遍历能做的，reduce都可以做，比如数组求和、数组求积、数组中元素出现的次数、数组去重等等</p>
+    </div>
+    <div class="smallTittle">
+      <h2>语法</h2>
+      <div class="list">
+        <ol>
+          <li>arr.reduce(function(prev,cur,index,arr){</li>
+          <li><span class="smallSpace"></span>...</li>
+          <li>},init);</li>
+        </ol>
+      </div>
+      <h2>参数</h2>
+      <ul>
+        <li>prev 必需。累计器累计回调的返回值; 表示上一次调用回调时的返回值，或者初始值 init;</li>
+        <li>cur 必需。表示当前正在处理的数组元素；</li>
+        <li>index 可选。表示当前正在处理的数组元素的索引，若提供 init 值，则起始索引为- 0，否则起始索引为1；</li>
+        <li>arr 可选。表示原数组；</li>
+        <li>init 可选。表示初始值。</li>
+      </ul>
+    </div>
+    <div class="smallTittle">
+      <h2>应用</h2>
+      <p>适合场景:数组有很多的遍历函数,reduce也是遍历函数,但是同时还拥有将每次遍历之后的返回值(结果)作为下一次遍历的参数prev</p>
+      <p>特别是像对象的操作,对象里面的对象,取出对象里面的对象的属性值就需要将第一次取出的结果作为参数对象再次进行取值</p>
+      <p><span class="smallSpace"></span></p>
+      <div class="list">
+        <ol>
+          <li>数据结构1</li>
+          <li>data{</li>
+          <li> <span class="space"></span>time:14</li>
+          <li>}</li>
+          <li>需求分析:vm.$data[value],value为time的时候取出的14</li>
+          <li></li>
+          <li>数据结构2</li>
+          <li>data{</li>
+          <li> <span class="space"></span>time{</li>
+          <li> <span class="space"></span><span class="space"></span>h:14</li>
+          <li> <span class="space"></span><span class="space"></span> m:36</li>
+          <li><span class="space"></span>}</li>
+          <li>}</li>
+          <li>需求分析:vm.$data[value],如果value是一个对象中的值如time.h</li>
+          <li>很明显vm.$data[time.h]无法取出预想中的值,会将time.h作为整个的key</li>
+          <li></li>
+          <li>思路:需要先将time对象取出,再从time对象中取出h</li>
+          <li>分析一:先对参数进行切割;value.split(',').切割之后就是一个数组[time, h]</li>
+          <li>分析二:参数数组提供的索引,而每次的的结果也是我们操作的对象</li>
+          <li></li>
+          <li>value.split(','').reduce( (data, currentIndex) => {</li>
+          <li><span class="smallSpace"></span>return data[currentIndex]},</li>
+          <li> vm.$data);</li>
+          <li>currentIndex并不是索引,而是数组中的值;即:time和h</li>
+          <li>将vm.$data作为初始值data;每次的返回值data[currentIndex]将作为下一次遍历循环的初始值data</li>
+        </ol>
+      </div>
+    </div>
+    <div class="smallTittle">
+      <h2>疑问</h2>
+      <p>对数组进行求和求积很简单,不给初始值的时候prev默认为索引为0的值,而index初始值则从1开始;简单的return prev+cur</p>
+      <p><span class="smallSpace"></span></p>
+      <p>对数组进行计数或者取出重复的值时,此时的初始值一般都会设置成空的对象{}或者控数组[];意思是不能直接对原来的数组进行操作吗?</p>
+      <p><span class="smallSpace"></span></p>
+      <div class="list">
+        <ol>
+          <li>去除重复的元素</li>
+          <li></li>
+          <li>let arr = ['a', 'b', 'c', 'd', 'd','a', 'e', 'f', 'c', 'g']</li>
+          <li>let orderArr = arr.reduce( (prev,cur) => {</li>
+          <li><span class="smallSpace"></span>if (prev.indexOf(cur) === -1){</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>prev.push(cur)</li>
+          <li><span class="smallSpace"></span>}</li>
+          <li><span class="smallSpace"></span>return prev</li>
+          <li>}, [ ] );</li>
+        </ol>
+        <p><span class="smallSpace"></span></p>
+        <ol>
+          <li>按属性对对象分类</li>
+          <li></li>
+          <li>let person = [</li>
+          <li><span class="smallSpace"></span>{</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>name: 'zhangsan',</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>age: 17</li>
+          <li><span class="smallSpace"></span>},</li>
+          <li><span class="smallSpace"></span>{</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>name: 'lisi',</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>age: 18</li>
+          <li><span class="smallSpace"></span>},</li>
+          <li><span class="smallSpace"></span>{</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>name: 'wangwu',</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>age: 18</li>
+          <li><span class="smallSpace"></span>},</li>
+          <li><span class="smallSpace"></span>{</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>name: 'zhaoliu',</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>age:18</li>
+          <li><span class="smallSpace"></span>}</li>
+          <li>]</li>
+          <li>let result =  person.reduce( (prev,cur) => {</li>
+          <li><span class="smallSpace"></span>let index = cur['age']</li>
+          <li><span class="smallSpace"></span>if (!prev[index]) {</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>prev[index] = []</li>
+          <li><span class="smallSpace"></span>}</li>
+          <li><span class="smallSpace"></span>prev[index].push(cur)</li>
+          <li><span class="smallSpace"></span>return prev</li>
+          <li> }, {});</li>
+        </ol>
+      </div>
+    </div>
+    <div class="smallTittle">
+      <h2>结论</h2>
+      <p>reduce() 是数组的归并方法，与 forEach()、map()、filter()等迭代方法一样都会对数组每一项进行<span>遍历</span></p>
+      <p>但是reduce() 可同时将前面数组项遍历产生的结果与当前遍历项进行运算，这一点是其他迭代方法无法企及的</p>
+    </div>
+
+  </div>
+  <div class="bottom"></div>
+</div>
+
+<script>
+ //  let arr = ['a', 'b', 'c', 'd', 'd','a', 'e', 'f', 'c', 'g']
+ //  let orderArr = arr.reduce( (prev,cur) => {
+ //    if (prev.indexOf(cur) === -1){
+ //      prev.push(cur)
+ //    }
+ //    return prev
+ //  },[]);
+ //  console.log(orderArr);
+ //
+ //  let person = [
+ //    {
+ //      name: 'zhangsan',
+ //      age: 17
+ //    },
+ //    {
+ //      name: 'lisi',
+ //      age: 18
+ //    },
+ //    {
+ //      name: 'wangwu',
+ //      age: 18
+ //    },
+ //    {
+ //      name: 'zhaoliu',
+ //      age:18
+ //    }
+ //  ]
+ // let result =  person.reduce( (prev,cur) => {
+ //    let index = cur['age']
+ //    if (!prev[index]) {
+ //      prev[index] = []
+ //    }
+ //    prev[index].push(cur)
+ //    return prev
+ //  }, {});
+ //  console.log(result);
+</script>
+</body>
+</html>
