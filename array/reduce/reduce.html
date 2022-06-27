@@ -173,11 +173,16 @@
           <li>分析一:先对参数进行切割;value.split(',').切割之后就是一个数组[time, h]</li>
           <li>分析二:参数数组提供的索引,而每次的的结果也是我们操作的对象</li>
           <li></li>
-          <li>value.split(','').reduce( (data, currentIndex) => {</li>
-          <li><span class="smallSpace"></span>return data[currentIndex]},</li>
+          <li>value.split(','').reduce( (data, cur) => {</li>
+          <li><span class="smallSpace"></span>return data[cur]},</li>
           <li> vm.$data);</li>
-          <li>currentIndex并不是索引,而是数组中的值;即:time和h</li>
-          <li>将vm.$data作为初始值data;每次的返回值data[currentIndex]将作为下一次遍历循环的初始值data</li>
+          <li>cur并不是索引,而是数组中当前的值;即:time和h</li>
+          <li>将vm.$data作为初始值data</li>
+          <li>第一次遍历的时候:data[time]即vm.$data[time]得到的time对象;并且作为下一次的初始值data</li>
+          <li>第二次遍历的时候:data[h]即time[h]</li>
+          <p><span class="smallSpace"></span></p>
+          <li><span class="fontRed">问题: 那index和arr这两个可选的参数有什么用呢</span></li>
+          <li><span class="smallSpace"></span>index可以用来控制循环的次数,比如最后一次想要赋值为1:if(index === arr.length-1){data[cur]=1}</li>
         </ol>
       </div>
     </div>
