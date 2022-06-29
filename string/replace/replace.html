@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>replace</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    html,body{
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+    .box{
+      width: 80%;
+      height: 100%;
+      margin: 0 auto;
+      background-color: #FFFFee;
+      /*border-left: 1px solid #ccc;*/
+      /*border-right: 1px solid #ccc;*/
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .head{
+      width: 100%;
+      height: 100px;
+      /*background-color: skyblue;*/
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .center{
+      width: 100%;
+      height: 80%;
+      /*background-color: pink;*/
+    }
+    .bottom{
+      width: 100%;
+      height: 200px;
+      /*background-color: greenyellow;*/
+      box-sizing: border-box;
+    }
+    h1{
+      text-align: left;
+      line-height: 100px;
+    }
+    ul{
+      padding-left: 20px;
+    }
+    ul li{
+      margin: 10px 0;
+    }
+    /*个性样式*/
+    /*红色字体*/
+    .fontRed{
+      color:red;
+    }
+    /*ps样式*/
+    .ps{
+      background-color: #eeeeee;
+      padding: 10px;
+      border-left: 10px solid #cccccc;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    .ps .psWord{
+      color: #555555;
+      line-height: 40px;
+    }
+    /*代码列表样式*/
+    .list{
+      background-color: #eeeeee;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .list ol li{
+      border-left: 1px solid #000;
+      padding-left: 5px;
+    }
+    /*小标题样式*/
+    .smallTittle{
+      background-color: #FFFFee;
+      border-bottom: 1px solid #ccc;
+      margin: 10px 0;
+      padding-bottom: 40px;
+    }
+    .smallTittle h2{
+      line-height: 80px;
+    }
+    /*空格space*/
+    .space{
+      display: inline-block;
+      width: 50px;
+    }
+    .smallSpace{
+      display: inline-block;
+      width: 20px;
+    }
+  </style>
+</head>
+<body>
+<!--
+1.ps结构样式
+    <div class="ps">
+      <p class="psWord">内容</p>
+    </div>
+2.代码结构样式
+    <div class="list">
+      <ol>
+        <li>1111111</li>
+      </ol>
+    </div>
+3.小标题结构样式
+     <div class="smallTittle">
+      <h2>前言</h2>
+      <p>reduce() 方法对<span class="fontRed">数组</span>中的每个元素执行一个由您提供的reduce函数(升序执行)，将其结果汇总为单个返回值</p>
+      <p>reduce方法可做的事情特别多，就是循环遍历能做的，reduce都可以做，比如数组求和、数组求积、数组中元素出现的次数、数组去重等等</p>
+    </div>
+-->
+<div class="box">
+  <div class="head">
+    <h1>String.prototype.replace()</h1>
+  </div>
+  <div class="center">
+    <div class="smallTittle">
+      <h2>语法</h2>
+      <div class="ps">
+        <p class="psWord">str.replace(regexp|substr, newSubStr|function)</p>
+        <p><span class="fontRed">字符串替换:</span>返回一个由替换值（replacement）替换部分或所有的模式（pattern）匹配项后的<span class="fontRed">新字符串</span>原字符串不会改变</p>
+        <p><span class="fontRed">第一个参数:</span>模式可以是一个字符串或者一个正则表达式.如果是字符串，则仅替换第一个匹配项</p>
+        <p><span class="fontRed">第二个参数:</span>替换值可以是一个字符串或者一个每次匹配都要调用的回调函数</p>
+      </div>
+      <h2>参数</h2>
+      <p>regexp (pattern)</p>
+      <p><span class="smallSpace"></span> 对象或者其字面量。该正则所匹配的内容会被第二个参数的返回值替换掉</p>
+      <p><span class="smallSpace"></span></p>
+      <p>substr (pattern)</p>
+      <p><span class="smallSpace"></span> 一个将被 newSubStr 替换的 字符串。其被视为一整个字符串，而不是一个正则表达式。仅第一个匹配项会被替换</p>
+      <p><span class="smallSpace"></span></p>
+      <p>newSubStr (replacement)</p>
+      <p><span class="smallSpace"></span> 用于替换掉第一个参数在原字符串中的匹配部分的字符串。该字符串中可以内插一些特殊的变量名</p>
+      <p><span class="smallSpace"></span></p>
+      <p>function (replacement)</p>
+      <p><span class="smallSpace"></span> 一个用来创建新子字符串的函数，该函数的返回值将替换掉第一个参数匹配到的结果</p>
+      <h2>个人理解</h2>
+      <p>字符串中的子字符串需要被新的内容替换;</p>
+      <p><span class="smallSpace"></span></p>
+      <p>这个子字符串就是第一个参数来确定,可以直接指定substr此时只会替换第一个找到的substr;如果子字符串出现多次呢?可以使用正则表达式</p>
+      <p><span class="smallSpace"></span></p>
+      <p>这个新的字符串就是第二个参数,可以是直接提供新的字符串newSubstr,也可以是函数</p>
+      <p><span class="smallSpace"></span>当匹配执行后，该函数就会执行。 函数的返回值作为替换字符串</p>
+      <p><span class="smallSpace"></span>如果第一个参数是正则表达式，并且其为全局匹配模式，那么这个方法将被多次调用，每次匹配都会被调用</p>
+      <p><span class="smallSpace"></span></p>
+      <h2>举例</h2>
+      <div class="ps">
+        <p class="psWord">第一个参数为字符串时:只会替换第一个匹配成功的</p>
+      </div>
+      <div class="list">
+        <ol>
+          <li>const p = 'The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?';</li>
+          <li>console.log(p.replace('dog', 'monkey'));</li>
+          <li>// expected output: "The quick brown fox jumps over the lazy monkey. If the dog reacted, was it really lazy?"</li>
+        </ol>
+      </div>
+      <p><span class="smallSpace"></span></p>
+      <div class="ps">
+        <p class="psWord">第一个参数为正则表达式时:非全局匹配只匹配一个;全局匹配匹配多个</p>
+      </div>
+      <div class="list">
+        <ol>
+          <li>const p = 'The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?';</li>
+          <li>const regex = /Dog/i; //非全局匹配,没有g;只会匹配第一个</li>
+          <li>console.log(p.replace(regex, 'ferret'));</li>
+          <li>// expected output: "The quick brown fox jumps over the lazy monkey. If the dog reacted, was it really lazy?"</li>
+          <li>const regex = /Dog/gi;  // 全局匹配g;匹配多个</li>
+          <li>console.log(p.replace(regex, 'ferret'));</li>
+          <li>// expected output: "The quick brown fox jumps over the lazy ferret. If the ferret reacted, was it really lazy?"</li>
+        </ol>
+      </div>
+      <p><span class="smallSpace"></span></p>
+      <div class="ps">
+        <p class="psWord">第二个参数为函数:function replacer(match, p1, p2[,..], offset, string) {}</p>
+        <p>match: 匹配的子串</p>
+        <p><span class="smallSpace"></span></p>
+        <p>p1,p2, ...: 假如 replace() 方法的第一个参数是一个RegExp 对象，则代表第 n 个括号匹配的字符串。</p>
+        <p><span class="smallSpace"></span>例如，如果是用 /(\a+)(\b+)/ 这个来匹配，p1 就是匹配的 \a+，p2 就是匹配的 \b+</p>
+        <p><span class="smallSpace"></span></p>
+        <p>offset: 匹配到的子字符串在原字符串中的偏移量。（比如，如果原字符串是 'abcd'，匹配到的子字符串是 'bc'，那么这个参数将会是 1）</p>
+        <p><span class="smallSpace"></span></p>
+        <p>string: 被匹配的原字符串</p>
+      </div>
+      <div class="list">
+        <ol>
+          <li>function replacer(match, p1, p2, p3, offset, string) {</li>
+          <li><span class="smallSpace"></span>// p1 is nondigits, p2 digits, and p3 non-alphanumerics</li>
+          <li><span class="smallSpace"></span>return [p1, p2, p3].join(' - ');</li>
+          <li>}</li>
+          <li>var newString = 'abc12345#$*%'.replace(/([^\d]*)(\d*)([^\w]*)/, replacer);</li>
+          <li>console.log(newString);  // abc - 12345 - #$*%</li>
+        </ol>
+      </div>
+      <p><span class="smallSpace"></span></p>
+      <div class="list">
+        <ol>
+          <li>上面的是单独定义了一个函数,其实我们可以使用匿名函数(或者箭头函数)</li>
+          <li>需求分析: value = '{{name}}';需要取出name这个字符串拿到data[name]将整个value替换</li>
+          <p><span class="smallSpace"></span></p>
+          <li>let value = '{{name}} '</li>
+          <li>let reg = /\{\{(.+?)\}\}/gi</li>
+          <li>let val = value.replace(reg, (...args) => {return XXX}</li>
+          <li>上面用的是箭头函数,注意里面的...args;实际上就是将回调函数的参数解构出来了match,p1[,...],offset,string</li>
+          <li>打印args: 数组里面四个内容,"{{name}}","name",0,"{{name}}"</li>
+          <p><span class="smallSpace"></span></p>
+          <li>第一个参数是匹配的字符;也就是正则表达式中匹配到的值;<span class="fontRed">即需要替换的区域</span></li>
+          <li><span class="fontRed">第二个参数是匹配正则括号的值，可以是多个(正则表达式中的括号(),有几个括号就有几个)</span>拿到的是被替换区域中需要保留的信息,如变量名等</li>
+          <li>第三个参数就是第二个参数所在的索引</li>
+          <li>第四个参数就是原字符串</li>
+          <li>回调函数的返回值就是用来替换的值</li>
+          <p><span class="smallSpace"></span></p>
+          <li>总结:函数形式适合什么情况?就是需要替换的字符串很复杂{{name}},需要整个替换掉;但是里面包含了有用的信息name需要单独提取出来</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>所以函数中的参数提供了很多的信息,watch规定了替换的区域,p则是替换区域中扣出的有效信息</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>
+<script>
+  function replacer(match, p1, p2, p3, offset, string) {
+    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+    console.log(match);
+    console.log(string);
+    return [p1, p2, p3].join(' - ');
+  }
+  var newString = 'abc12345#$*%'.replace(/([^\d]*)(\d*)([^\w]*)/, replacer);
+  console.log(newString);  // abc - 12345 - #$*%
+
+</script>
+</body>
+</html>

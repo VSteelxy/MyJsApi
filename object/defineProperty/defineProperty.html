@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>defineProperty</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    html,body{
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+    .box{
+      width: 80%;
+      height: 100%;
+      margin: 0 auto;
+      background-color: #FFFFee;
+      /*border-left: 1px solid #ccc;*/
+      /*border-right: 1px solid #ccc;*/
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .head{
+      width: 100%;
+      height: 100px;
+      /*background-color: skyblue;*/
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .center{
+      width: 100%;
+      height: 80%;
+      /*background-color: pink;*/
+    }
+    .bottom{
+      width: 100%;
+      height: 200px;
+      /*background-color: greenyellow;*/
+      box-sizing: border-box;
+    }
+    h1{
+      text-align: left;
+      line-height: 100px;
+    }
+    ul{
+      padding-left: 20px;
+    }
+    ul li{
+      margin: 10px 0;
+    }
+    /*个性样式*/
+    /*红色字体*/
+    .fontRed{
+      color:red;
+    }
+    /*ps样式*/
+    .ps{
+      background-color: #eeeeee;
+      padding: 10px;
+      border-left: 10px solid #cccccc;
+      margin-bottom: 10px;
+      margin-top: 20px;
+      box-sizing: border-box;
+    }
+    .ps p{
+      color: #555555;
+      line-height: 40px;
+    }
+    /*代码列表样式*/
+    .list{
+      background-color: #eeeeee;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .list ol li{
+      border-left: 1px solid #000;
+      padding-left: 5px;
+    }
+    /*小标题样式*/
+    .smallTittle{
+      background-color: #FFFFee;
+      border-bottom: 1px solid #ccc;
+      margin: 10px 0;
+      padding-bottom: 40px;
+    }
+    .smallTittle h2{
+      line-height: 80px;
+    }
+    /*空格space*/
+    .space{
+      display: inline-block;
+      width:  4rem;
+    }
+    .smallSpace{
+      display: inline-block;
+      width: 20px;
+    }
+  </style>
+</head>
+<body>
+<!--
+1.ps结构样式
+    <div class="ps">
+      <p>内容</p>
+    </div>
+2.代码结构样式
+    <div class="list">
+      <ol>
+        <li>1111111</li>
+      </ol>
+    </div>
+3.小标题结构样式
+     <div class="smallTittle">
+      <h2>前言</h2>
+      <p>reduce() 方法对<span class="fontRed">数组</span>中的每个元素执行一个由您提供的reduce函数(升序执行)，将其结果汇总为单个返回值</p>
+      <p>reduce方法可做的事情特别多，就是循环遍历能做的，reduce都可以做，比如数组求和、数组求积、数组中元素出现的次数、数组去重等等</p>
+    </div>
+-->
+<div class="box">
+  <div class="head">
+    <h1>Object.defineProperty()</h1>
+    <p>特点概述:可以直接在一个对象上定义一个新属性,或者修改一个对象的现有属性,并返回这个对象</p>
+  </div>
+  <div class="center">
+    <div class="smallTittle">
+      <h2>语法</h2>
+      <div class="ps">
+        <p class="psWord">Object.defineProperty(obj, prop, descriptor)</p>
+        <p><span class="fontRed">第一个参数obj:</span>要定义属性的对象</p>
+        <p><span class="fontRed">第二个参数prop:</span>要定义或修改的属性的名称或 Symbol</p>
+        <p><span class="fontRed">第三个参数descriptor:</span>要定义或修改的属性描述符</p>
+        <p><span class="fontRed">返回值:</span>传递给函数的对象</p>
+      </div>
+    </div>
+    <div class="smallTittle">
+      <h2>初体验</h2>
+      <div class="list">
+        <ol>
+          <li>const object1 = {};</li>
+          <li><span class="smallSpace"></span></li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li><span class="smallSpace"></span>writable: false</li>
+          <li>});</li>
+          <li><span class="smallSpace"></span></li>
+          <li>object1.property1 = 77;</li>
+          <li>// throws an error in strict mode</li>
+          <li><span class="smallSpace"></span></li>
+          <li>console.log(object1.property1);</li>
+          <li>// expected output: 42</li>
+        </ol>
+      </div>
+      <h2>解析</h2>
+      <div class="ps">
+        <p >1.描述符descriptor</p>
+        <p>对象中存在的属性描述符有两种主要形式：数据描述符和访问器描述符。</p>
+        <p>1.1数据描述符是具有值的属性，该值可能是可写的，也可能是不可写的。</p>
+        <p>1.2访问器描述符是由一对 getter-setter 函数描述的属性。</p>
+        <p><span class="fontRed">描述符必须是这两种风格之一；它不能两者兼而有之</span>(value/writable和getter-setter两种不能共存)</p>
+      </div>
+      <div class="ps">
+        <p >1.1数据描述符</p>
+      </div>
+      <div class="list">
+        <ol>
+          <li><span class="fontRed">// 注意点1.默认情况下通过defineProperty新增的属性取值是不能<span style="color:mediumpurple" >修改的</span></span></li>
+          <li>const object1 = {};</li>
+          <li><span class="smallSpace"></span></li>
+          <li>// 可以通过value来告诉defineProperty方法新增的属性的取值是什么</li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li>});</li>
+          <li><span class="smallSpace"></span></li>
+          <li>object1.property1 = 77;</li>
+          <li>// throws an error in strict mode</li>
+          <li><span class="smallSpace"></span></li>
+          <li>console.log(object1.property1);</li>
+          <li>// expected output: 42</li>
+          <li><span class="smallSpace"></span></li>
+          <li><span class="fontRed">// bug1解决:默认情况下writable:false;需要显示的修改成true </span></li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li><span class="smallSpace"></span>writable: true,</li>
+          <li>});</li>
+        </ol>
+      </div>
+      <p><span class="smallSpace"></span></p>
+      <div class="list">
+        <ol>
+          <li><span class="fontRed">// 注意点2.默认情况下通过defineProperty新增的属性取值是不能<span style="color:mediumpurple" >删除的</span></span></li>
+          <li>const object1 = {};</li>
+          <li><span class="smallSpace"></span></li>
+          <li>// 可以通过value来告诉defineProperty方法新增的属性的取值是什么</li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li><span class="smallSpace"></span>writable: true,</li>
+          <li>});</li>
+          <li><span class="fontRed">// bug2解决:默认情况下configurable:false;需要显示的修改成true </span></li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li><span class="smallSpace"></span>writable: true,</li>
+          <li><span class="smallSpace"></span>configurable: true,</li>
+          <li>});</li>
+        </ol>
+      </div>
+      <p><span class="smallSpace"></span></p>
+      <div class="list">
+        <ol>
+          <li><span class="fontRed">// 注意点3.默认情况下通过defineProperty新增的属性取值是不能<span style="color:mediumpurple" >遍历的(迭代)</span></span></li>
+          <li>const object1 = {};</li>
+          <li><span class="smallSpace"></span></li>
+          <li>// 可以通过value来告诉defineProperty方法新增的属性的取值是什么</li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li><span class="smallSpace"></span>writable: true,</li>
+          <li><span class="smallSpace"></span>configurable: true,</li>
+          <li>});</li>
+          <li><span class="fontRed">// bug3解决:默认情况下enumerable:false;需要显示的修改成true </span></li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>value: 42,</li>
+          <li><span class="smallSpace"></span>writable: true,</li>
+          <li><span class="smallSpace"></span>configurable: true,</li>
+          <li><span class="smallSpace"></span>enumerable: true,</li>
+          <li>});</li>
+        </ol>
+      </div>
+      <div class="ps">
+        <p >1.2访问器描述符:通过defineProperty给属性添加get/set方法</p>
+        <p><span style="color: mediumpurple;">特点:  设置get/set之后,只要是获取这个属性的值就会自动调用get;设置这个属性的值就会自动调用set</span></p>
+        <p><span style="color: mediumpurple;">翻译翻译: 意思就是这个两个方法实际上就是触发时机,也就是知道了数据什么时候更新,便于实现数据驱动</span></p>
+        <p><span class="fontRed">注意点: 如果设置了get/set方法;那么就不能通过value直接赋值,也不能使用属性writable</span></p>
+      </div>
+      <div class="list">
+        <ol>
+          <li><span class="fontRed">// 注意点1.设置get/set</span></li>
+          <li>const object1 = {};</li>
+          <li>let oldValue = 'fuck'</li>
+          <li><span class="smallSpace"></span></li>
+          <li>Object.defineProperty(object1, 'property1', {</li>
+          <li><span class="smallSpace"></span>// value: 42,   // 不能设置value</li>
+          <li><span class="smallSpace"></span>// writable: true,    // 不能设置writable</li>
+          <li><span class="smallSpace"></span>configurable: true,</li>
+          <li><span class="smallSpace"></span>enumerable: true,</li>
+          <li><span class="smallSpace"></span></li>
+          <li><span class="smallSpace"></span>get () {</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>return oldValue;</li>
+          <li><span class="smallSpace"></span>},</li>
+          <li><span class="smallSpace"></span></li>
+          <li><span class="smallSpace"></span>set (newValue) {</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>if(oldValue !== newValue){</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>oldValue = newValue;</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+          <li><span class="smallSpace"></span>}</li>
+          <li>});</li>
+        </ol>
+      </div>
+        <h2>练一练</h2>
+        <div class="ps">
+          <p>需求: 快速监听对象中所有属性的变化</p>
+          <p>分析:  对象中有很多属性,所有的属性都需要进行监听;遍历循环(需要注意的是深度遍历以及set时赋值一个对象时这个对象也需要监听)</p>
+        </div>
+        <div class="list">
+          <ol>
+            <li><span class="fontRed">// 定义一个类Observe</span></li>
+            <li>class Observe{</li>
+            <li><span class="smallSpace"></span>// 只要将需要监听的那个对象传递给Observe这个类;这个类就可以快速的给传入的对象的所有属性添加get/set方法</li>
+            <li><span class="smallSpace"></span>constructor(data){</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span>this.observe(data);</li>
+            <li><span class="smallSpace"></span>}</li>
+            <li><span class="smallSpace"></span>observe(obj){</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span>if (obj && typeof obj === 'object') {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>for (let key in obj) {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>this.defineRecative(obj, key, obj[key]);</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+            <li><span class="smallSpace"></span>}</li>
+            <li><span class="smallSpace"></span>// obj:需要操作的对象</li>
+            <li><span class="smallSpace"></span>// attr:需要新增get/set方法的属性</li>
+            <li><span class="smallSpace"></span>// value:需要新增get/set方法属性的取值</li>
+            <li><span class="smallSpace"></span>defineRecative(obj, attr, value){</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="fontRed">// 如果属性的值也是一个对象,那么需要给这个值的所有属性添加</span></li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span>this.observe(value);</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span>Object.defineProperty(obj, attr, {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>get () {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>return value;</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>},</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>set: (newValue)=> {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>if (value !== newValue) {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="fontRed">// 如果newValue也是一个对象,需要给这个对象的所有属性添加</span></li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>this.observe(newValue);</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>value = newValue; {</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+            <li><span class="smallSpace"></span><span class="smallSpace"></span>})</li>
+            <li><span class="smallSpace"></span>}</li>
+            <li>}</li>
+          </ol>
+        </div>
+      </div>
+  </div>
+  <div class="bottom"></div>
+</div>
+<script>
+  class Observe{
+    // 只要将需要监听的那个对象传递给Observe这个类;这个类就可以快速的给传入的对象的所有属性添加get/set方法
+    constructor(data){
+      this.observe(data);
+    }
+    observe(obj){
+      if (obj && typeof obj === 'object') {
+        // 遍历取出传入对象的所有属性,给遍历到的属性都增加get/set方法
+        for (let key in obj) {
+          this.defineRecative(obj, key, obj[key]);
+        }
+      }
+    }
+    // obj:需要操作的对象
+    // attr:需要新增get/set方法的属性
+    // value:需要新增get/set方法属性的取值
+    defineRecative(obj, attr, value){
+      // 如果属性的值也是一个对象,那么需要给这个值的所有属性添加
+      this.observe(value);
+      Object.defineProperty(obj, attr, {
+        get () {
+          return value;
+        },
+        set: (newValue)=> {
+          if (value !== newValue) {
+            // 如果newValue也是一个对象,需要给这个对象的所有属性添加
+            this.observe(newValue);
+            value = newValue;
+          }
+        }
+      })
+    }
+  }
+</script>
+</body>
+</html>

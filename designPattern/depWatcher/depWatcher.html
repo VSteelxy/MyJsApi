@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>depWatcher</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    html,body{
+      width: 100%;
+      height: 100%;
+      background-color: white;
+    }
+    .box{
+      width: 80%;
+      height: 100%;
+      margin: 0 auto;
+      background-color: #FFFFee;
+      /*border-left: 1px solid #ccc;*/
+      /*border-right: 1px solid #ccc;*/
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    .head{
+      width: 100%;
+      height: 100px;
+      /*background-color: skyblue;*/
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .center{
+      width: 100%;
+      height: 80%;
+      /*background-color: pink;*/
+    }
+    .bottom{
+      width: 100%;
+      height: 200px;
+      /*background-color: greenyellow;*/
+      box-sizing: border-box;
+    }
+    h1{
+      text-align: left;
+      line-height: 100px;
+    }
+    ul{
+      padding-left: 20px;
+    }
+    ul li{
+      margin: 10px 0;
+    }
+    /*个性样式*/
+    /*红色字体*/
+    .fontRed{
+      color:red;
+    }
+    /*ps样式*/
+    .ps{
+      background-color: #eeeeee;
+      padding: 10px;
+      border-left: 10px solid #cccccc;
+      margin-bottom: 10px;
+      margin-top: 20px;
+      box-sizing: border-box;
+    }
+    .ps p{
+      color: #555555;
+      line-height: 40px;
+    }
+    /*代码列表样式*/
+    .list{
+      background-color: #eeeeee;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .list ol li{
+      border-left: 1px solid #000;
+      padding-left: 5px;
+    }
+    /*小标题样式*/
+    .smallTittle{
+      background-color: #FFFFee;
+      border-bottom: 1px solid #ccc;
+      margin: 10px 0;
+      padding-bottom: 40px;
+    }
+    .smallTittle h2{
+      line-height: 80px;
+    }
+    /*空格space*/
+    .space{
+      display: inline-block;
+      width:  4rem;
+    }
+    .smallSpace{
+      display: inline-block;
+      width: 20px;
+    }
+  </style>
+</head>
+<body>
+<!--
+1.ps结构样式
+    <div class="ps">
+      <p class="psWord">内容</p>
+    </div>
+2.代码结构样式
+    <div class="list">
+      <ol>
+        <li>1111111</li>
+      </ol>
+    </div>
+3.小标题结构样式
+     <div class="smallTittle">
+      <h2>前言</h2>
+      <p>reduce() 方法对<span class="fontRed">数组</span>中的每个元素执行一个由您提供的reduce函数(升序执行)，将其结果汇总为单个返回值</p>
+      <p>reduce方法可做的事情特别多，就是循环遍历能做的，reduce都可以做，比如数组求和、数组求积、数组中元素出现的次数、数组去重等等</p>
+    </div>
+-->
+<div class="box">
+  <div class="head">
+    <h1>发布订阅者模式</h1>
+  </div>
+  <div class="center">
+    <div class="ps">
+      <p>目录</p>
+      <p>1.发布订阅者思想</p>
+      <p>2.结合实例分析</p>
+    </div>
+    <div class="smallTittle">
+      <h2>1.发布订阅者思想</h2>
+      <p>简单概括</p>
+      <p>就是张三去超市买东西.</p>
+      <p>张三肚子饿了,去超市想买白象方便面,但是超市缺货,于是张三就登记了相关信息给超市老板订货;老板去隔壁超市买了两包然后通知张三到货了</p>
+      <p><span class="smallSpace"></span></p>
+      <p>稍微分析</p>
+      <p>发布订阅模式可以看成是两个主角:一个是订阅者,一个是发布者(其实是三个,第三个是状态管理者,相当于物流司机,能够具体掌控什么时候更新,后面再说)</p>
+      <p>订阅者: 不难理解,就是订阅的人,就是我们的张三</p>
+      <p>发布者: 不难理解,就是发布信息的人,就是我们的超市老板</p>
+      <p><span class="smallSpace"></span></p>
+      <div class="list">
+        <p>直接上代码(模拟的是vue中的数据驱动界面更新)</p>
+        <ol>
+          <li>发布者类</li>
+          <li>class Dep{</li>
+          <li><span class="smallSpace"></span>constructor(){</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>// 定义一个专门管理某个属性对应的观察者对象的数组</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>this.subs = []</li>
+          <li><span class="smallSpace"></span>}</li>
+          <li><span class="smallSpace"></span>// 订阅者收集的方法:就是记录有哪些订阅者订阅了</li>
+          <li><span class="smallSpace"></span>addSubs(watcher){</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>this.subs.push(watcher);</li>
+          <li><span class="smallSpace"></span>}</li>
+          <li><span class="smallSpace"></span>// 发布订阅的方法:就是数据有更新(货到了),告诉订阅者;利用广播的方式,告诉所有的订阅者,你们自己判断</li>
+          <li><span class="smallSpace"></span>notify(){</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>this.subs.forEach(watcher => watcher.update());</li>
+          <li><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+          <li><span class="smallSpace"></span>}</li>
+        </ol>
+        <p><span class="smallSpace"></span></p>
+        <ol>
+        <li>订阅者类</li>
+        <li>class Watcher{</li>
+        <li><span class="smallSpace"></span>constructor(vm, attr, cb){</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>this.vm = vm;   // 这个是vue的实例,张三来自vue</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>this.attr = attr;</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>this.cb = cb;</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>// 在创建观察者对象的时候就去获取当前的旧值</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>this.oldValue = this.getOldValue();</li>
+        <li><span class="smallSpace"></span>}</li>
+        <li><span class="smallSpace"></span>getOldValue(){</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>// CompilerUtil是自定义的一个工具类</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>Dep.target = this;  //静态属性,下面系统自动调用get()方法中会用到订阅者实例</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>let oldValue = CompilerUtil.getValue(this.vm,this.attr)  //获取初始值,会调用get()方法</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>Dep.target = null;  //静态属性,上面用完之后就可以删除订阅者实例了</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>return oldValue;</li>
+        <li><span class="smallSpace"></span>}</li>
+        <li><span class="smallSpace"></span>// 定义一个更新的方法,用于判断新值和旧值是否相同</li>
+        <li><span class="smallSpace"></span>update(){</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>let newValue = CompilerUtil.getValue(this.vm,this.attr)</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>if(this.oldValue !== newValue){</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span><span class="smallSpace"></span>this.cb(newValue, this.oldValue);</li>
+        <li><span class="smallSpace"></span><span class="smallSpace"></span>}</li>
+        <li><span class="smallSpace"></span>}</li>
+        <li>}</li>
+      </ol>
+      </div>
+      <p><span class="smallSpace"></span></p>
+      <p>仔细分析</p>
+      <p><span class="smallSpace"></span></p>
+      <p>发布者:可以定义一个类class Dep来模拟我们的超市老板(只做两件事)</p>
+      <p>超市老板需要一个本子来记录管理订阅者<span class="fontRed">[属性]</span>:发布者需要一个数组(里面只是观察者对象,许许多多的张三,张三这个对象中绑定了需要订阅的属性以及其他的信息)</p>
+      <p>超市老板有了本子那就可以写了:发布者需要一个方法,将观察者对象添加到数组中(只是简单的记录张三这个对象)</p>
+      <p>超市老板有点呆呆的,因为他只记录了对象的名字,如张三;当有数据更新(到货了)老板不知道是谁订阅的,他就会通知所有人你们自己判断</p>
+      <p><span class="smallSpace"></span>发布者需要一个方法,告诉所有的订阅者有数据更新,交给订阅者自己判断(调用订阅者自定义的update()方法)</p>
+      <p><span class="smallSpace"></span></p>
+      <p>订阅者:可以定义一个类class Watcher来模拟我们的张三</p>
+      <p>张三知道自己想要的是白象方便面<span class="fontRed">[属性]</span>: 订阅者需要订阅的内容(属性);</p>
+      <p>张三去超市的原因是他现在手里没有(初始值)<span class="fontRed">[属性]</span>: 订阅者需要需要知道订阅内容的初始值;</p>
+      <p>张三拿到方便面之后是炒着吃还是煎着吃需要一个回调<span class="fontRed">[属性]</span>: 订阅者需要一个回调函数(类中回调为了传参;创建实例的时候就需要定义具体使用了)</p>
+      <p>因为发布者是广播的形式,需要订阅者来判断数据更新是否是满足自己的需求(对张三而言就是到的货是不是白象方便面): 订阅者需要一个方法,判断数据是否真的更新</p>
+      <p><span class="smallSpace"></span></p>
+      <div class="ps">
+        <p class="psWord">小结: 整体的类基本上很简单,但是还有几个问题没有解决</p>
+        <p>第一: 什么时候创建订阅者对象</p>
+        <p>第二: 什么时候创建发布者对象</p>
+        <p>第三: 发布者对象什么时候添加订阅者对象</p>
+        <p>第四: 什么时候发布者对象通知订阅者(什么时候发布者调用notify()函数)</p>
+      </div>
+    </div>
+    <div class="smallTittle">
+      <h2>2.结合实例分析</h2>
+      <p>需求分析:vue一大特性就是数据驱动界面更新,vm.$data中的数据发生变化的时候,界面中的数据也会跟着发生变化</p>
+      <p>知识回顾:Object.defineProperty():给对象中的所有属性添加get/set方法</p>
+      <p><span class="space"></span>获取属性值时会自动调用里面get方法;设置属性值时会自动调用set方法</p>
+      <p><span class="space"></span>可以查看Object/defineProperty()</p>
+      <p><span class="smallSpace"></span></p>
+      <p>第0.0步: vue是一个类,自定义一个vue类,创建一个vue实例vm(包含被控制区域$el和被控制区域的数据$data;从而根据数据$data去渲染被控区域$el)</p>
+      <p>第0.5步: 提取元素到内存DocumentFragment.每次替换一个内容都会重新渲染,需要将控制区域中的内容先添加到内存中,全部替换后再一次性渲染</p>
+      <p><span class="space"></span>将网页上的元素放到内存中: let fragment=document.createDocumentFragment() fragment.appendChild(node)添加到内存会从网页上删除这个node</p>
+      <p><span class="space"></span>利用指定的数据编译内存中的元素:  node是元素(node.attributes拿到属性判断v-model,v-html等指令)还是文本(插值{{}});根据具体情况用$data中数据替换</p>
+      <p><span class="space"></span><span class="space"></span>注意点:替换的时候value.replace(reg, (...args)=>{}));第二个参数是一个函数,可以剔除原内容的同时拿到网页中的变量名time.h</p>
+      <p><span class="space"></span><span class="space"></span>注意点:从$data中取值需要一级变量名:明显time.h无法直接$data[time.h];取值.str.reduce(reg,(prev,cur)=>{}})</p>
+      <p><span class="space"></span>将编译好的内容重新渲染到网页上:  vm.$el.appendChild(fragment)</p>
+      <p>现在为止,网页的第一次渲染就完成了.下面实现修改$data中的数据的时候,界面中的数据会自动更新</p>
+      <p><span class="smallSpace"></span></p>
+      <p>第一步: 在创建vue实例的时候就需要将vm.$data中所有的数据都通过Object.defineProperty()方法绑定get/set方法;</p>
+      <p><span class="space"></span>这样get/set方法里面就是触发的时间点(其实这个就相当于第三个主角-状态管理者)</p>
+      <p>第二步: 在第一次渲染的时候就给所有的属性添加订阅者(一个属性可以对应多个订阅者)</p>
+      <p><span class="space"></span>(在操作UI的方法中创建订阅者new Watcher(vm, value, (newValue,oldValue)=>{node.value = newValue});)</p>
+      <p>第三步:只要创建了订阅者,就应该通过发布者来管理订阅者(将当前属性的所有订阅者对象都放到当前属性的发布订阅对象中管理起来)</p>
+      <p><span class="space"></span>1.管理订阅者需要发布者,什么时候创建发布者?一个属性就应该有一个发布者,所以应该在给属性绑定get()前面创建发布者即可</p>
+      <p><span class="space"></span>2.什么时候管理订阅者?在我们创建订阅者的时候获取了一次$data中初始数据,会调用defineProperty中的get方法;get方法中就是管理订阅者的时候</p>
+      <p><span class="space"></span>3.get(){dp.addSubs(Dep.target)}但是get方法中拿不到订阅者对象get()触发是在订阅者获取初始值的时候,在获取初始值之前我们可以Dep.target = this;</p>
+      <p><span class="space"></span><span class="space"></span>也就是在订阅者类中获取初始值之前将自己绑定给类Dep静态属性;获取初始值的时候触发get()发布者就会管理订阅者;获取之后就可以接触绑定</p>
+      <p><span class="space"></span><span class="space"></span>Dep.target = null</p>
+      <p>第四步:$data中的数据更新的时候,发布者就应该广播通知订阅者数据更新.很明显:在set()方法中调用发布者的notify()方法通知</p>
+      <p><span class="smallSpace"></span></p>
+      <div class="ps">
+        <p class="psWord">小结</p>
+        <p>1.什么时候订阅?哪里用到了就在哪里订阅.UI界面中哪里用到了$data中的属性,哪里就应该创建订阅者.所以可以在UI第一次渲染初始值的时候创建订阅者</p>
+        <p>2.一个属性就是一个发布者.所以什么时候创建发布者?在我们遍历所有的属性给属性绑定get/set方法的时候就可以创建发布者了</p>
+        <p>3.发布者什么时候添加订阅者?订阅者创建了就应该要管理,订阅者为了判断数据是否更新需要获取初始数据即会调用一次get()方法<span class="fontRed">(注意给Dep传递watcher对象)</span></p>
+        <p>4.$data中的数据更新,就会调用set()方法;所以可以在set()方法中发布者调用notify()通知所有的订阅者数据更新了让他们自己判断(update(){callback(更新UI)})</p>
+      </div>
+      <div class="ps">
+        <p class="psWord">总结</p>
+        <p>1.其实你会发现,订阅者只做了一件事,那就是判断数据是否真的更新update();是的话就调用回调函数callback;这个update触发时机就是在发布者notify()中;所以订阅者的方法寄生在发布者的notify方法中不用管</p>
+        <p>2.发布者有两件事情要做,处理好这两件事就了.一件事是管理订阅者,在get()方法中;一件事情是发布通知,在set()方法中</p>
+      </div>
+    </div>
+  </div>
+  <div class="bottom"></div>
+</div>
+</body>
+</html>
